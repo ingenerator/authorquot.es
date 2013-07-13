@@ -63,6 +63,7 @@ if ( ! isset($title)) {
 <!-- Javascript -->
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="/assets/js/quote_builder.js"></script>
 
 </body>
 </html>

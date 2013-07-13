@@ -1,0 +1,128 @@
+/**
+ * Integrates with jwplayer to create quote clips from a longer audio file
+ *
+ * @author    Andrew Coulton <andrew@ingenerator.com>
+ * @copyright 2013 inGenerator Ltd
+ *
+ */
+
+!function ($) {
+
+    var QuoteBuilder = function(player, widget, toggle_button) {
+        this.player = player;
+        this.widget = widget;
+        this.toggle_button = toggle_button;
+    };
+
+    QuoteBuilder.prototype = {
+
+        constructor: QuoteBuilder
+
+        , player: null
+
+        , widget: null
+
+        , toggle_button: null
+
+        , start_field : null
+
+        , end_field: null
+
+        , _active: null
+
+        , on_toggle: function QuoteBuilder_on_toggle() {
+            switch (this._active) {
+                case null:
+                    this.start_quote();
+                    break;
+                case true:
+                    this.stop_quote();
+                    break;
+                case false:
+                    throw "didn't expect to be clicked when stopped";
+                default:
+                    throw "unexpected state";
+            }
+        }
+
+        , start_quote: function QuoteBuilder_start_quote() {
+            // Mark the start time and format as hours, minutes and seconds
+            var position = this.player.getPosition();
+
+            this.start_field = this.widget.find('input[name=start]');
+            this.end_field = this.widget.find('input[name=end]');
+            this.start_field.val(this._formatTime(position));
+
+            // Show the edit form and store class state
+            this.widget.addClass('in');
+            this._active = true;
+
+            // Toggle the button and set the text
+            this.toggle_button.button('toggle');
+            this.toggle_button.button('active');
+            this.toggle_button.addClass('btn-success');
+
+            // Attach the timestamp handler to the end-time field
+            this.player.onTime(this.on_player_time.bind(this));
+        }
+
+        , on_player_time: function QuoteBuilder_on_player_time(event) {
+            if (this._active != true) {
+                return;
+            }
+            this.end_field.val(this._formatTime(event.position));
+        }
+
+        , stop_quote: function QuoteBuilder_on_stop_quote() {
+
+            // Update state
+            this._active = false;
+
+            // Update the toggle button
+            this.toggle_button.button('reset');
+            this.toggle_button.button('disabled');
+
+            // Stop the player and seek back to the start
+            this.player.pause();
+            this.player.seek(this._parseTime(this.start_field.val()));
+
+            // Focus the start time field
+            this.start_field.focus();
+        }
+
+        , _formatTime: function QuoteBuilder_format_time(seconds) {
+            var date = new Date(seconds * 1000);
+
+            var hh = date.getHours();
+            var mm = date.getMinutes();
+            var ss = date.getSeconds();
+
+            if (mm < 10) {mm = "0"+mm;}
+            if (ss < 10) {ss = "0"+ss;}
+            return hh+':'+mm+':'+ss;
+        }
+
+        , _parseTime: function QuoteBuilder_parse_time(hms) {
+            var parts = hms.split(':');
+            return (+parts[0] * 3600) + (+parts[1] * 60) + (+parts[2]);
+        }
+
+
+
+    };
+
+    /**
+     * Attach the click handler for clicking on the start button
+     */
+    $(document).on('click.quotebuilder.start', '#new-quote-toggle', function qb_on_toggle(e) {
+       var new_quote = $('#new-quote').first();
+
+       if ( ! window.quote_builder) {
+           window.quote_builder = new QuoteBuilder(jwplayer(), new_quote, $(this));
+       }
+
+       window.quote_builder.on_toggle();
+       e.preventDefault();
+    });
+
+}(window.jQuery);

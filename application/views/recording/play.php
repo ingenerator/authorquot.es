@@ -26,12 +26,13 @@
 				jwplayer('audio-player').setup({
 					file: '<?=htmlspecialchars($recording['url']);?>',
 					width: '100%',
-					height: '28'
+					height: '28',
+					autostart: true
 				});
 			</script>
 		</div>
 		<div class="span3">
-			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#new-quote">
+			<button id="new-quote-toggle" type="button" class="btn btn-primary" data-active-text="Mark end of quote">
 				<i class="icon-quote-left"></i> Quote this recording
 			</button>
 		</div>
