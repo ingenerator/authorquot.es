@@ -107,6 +107,11 @@
         }
 
         , move_marker: function QuoteBuilder_on_move_marker(marker, dir) {
+            if (this._active == true)
+            {
+                this.stop_quote();
+            }
+
             var increment = (dir == 'fwd') ? 1 : -1;
 
             // Update the position marker
