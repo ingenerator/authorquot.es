@@ -14,10 +14,15 @@ class Controller_Welcome extends Controller
 
   /**
    * Show the homepage
+   *
+   * @return void
    */
   function action_index()
   {
-    $this->response->body(View::factory('home'));
+    $template = View::factory('templates/default');
+    $template->content = View::factory('home');
+
+    $this->response->body($template->render());
   }
 
 }
