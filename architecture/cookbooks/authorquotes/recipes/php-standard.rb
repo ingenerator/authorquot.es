@@ -71,3 +71,10 @@ include_recipe("php")
 # end
 
 # Install required PHP modules
+php_module "mysql"
+php_module "mysqli" do
+  recipe_name "mysql"
+end
+php_module "pdo_mysql" do
+  recipe_name "mysql"
+end

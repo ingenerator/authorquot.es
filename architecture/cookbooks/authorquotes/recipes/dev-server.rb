@@ -48,3 +48,11 @@ include_recipe "authorquotes::virtual-host"
 # Sox for image processing
 package "libsox-fmt-mp3"
 package "sox"
+
+# Mysql
+# Set up a local mysql server
+node.default['mysql']['server_root_password'] = 'mysql'
+node.default['mysql']['server_debian_password'] = 'mysql'
+node.default['mysql']['server_repl_password'] = 'mysql'
+
+include_recipe "mysql::server"
