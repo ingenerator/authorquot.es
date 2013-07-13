@@ -18,9 +18,9 @@ override_attributes({
        'maxrequestsperchild' => 0
     },
   },
-  'authorquotees' => {
+  'authorquotes' => {
     'site' => {
-      'host' => 'authorquotes.dev',
+      'host' => 'authorquot.es',
       'aliases' => [],
       'docroot' => '/var/www/authorquot.es/htdocs',
       'log_level' => 'info',

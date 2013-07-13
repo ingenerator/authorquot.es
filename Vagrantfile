@@ -57,6 +57,13 @@ Vagrant::Config.run do |config|
   chef.data_bags_path = "architecture/data_bags"
 
   chef.add_role "dev-server"
-  end
+
+  chef.json = {
+    'authorquotes' => {
+      'site' => {
+        'host' => 'authorquotes.dev',
+      },
+	},
+  }
 
 end
