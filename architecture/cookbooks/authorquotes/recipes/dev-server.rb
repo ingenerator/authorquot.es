@@ -29,6 +29,12 @@ link "/var/www/authorquot.es" do
   group node['apache']['group']
 end
 
+directory "/var/log/authorquot.es" do
+  owner node['apache']['user']
+  group node['apache']['group']
+  mode 0700
+end
+
 node.override['apache']['listen_ports'] = [node['authorquotes']['http_port']]
 
 # Packages
