@@ -46,17 +46,17 @@
 
 					<div class="input-append">
 						<input class="span1" name="start" type="text" value="0:00">
-						<button class="btn" type="button">&lt;</button>
-						<button class="btn" type="button">&gt;</button>
+						<button class="btn quote-seek" type="button" data-quote-seek="start" data-quote-seek-dir="back">&lt;</button>
+						<button class="btn quote-seek" type="button" data-quote-seek="start" data-quote-seek-dir="fwd">&gt;</button>
 					</div>
 
 					<div class="input-append">
 						<input class="span1" name="end" type="text" value="0:00">
-						<button class="btn" type="button">&lt;</button>
-						<button class="btn" type="button">&gt;</button>
+						<button class="btn quote-seek" type="button" data-quote-seek="end" data-quote-seek-dir="back">&lt;</button>
+						<button class="btn quote-seek" type="button" data-quote-seek="end" data-quote-seek-dir="fwd">&gt;</button>
 					</div>
 
-					<button class="btn" type="button">Play quotation</button>
+					<button class="btn quote-preview" type="button">Play quotation</button>
 				</div>
 			</div>
 
