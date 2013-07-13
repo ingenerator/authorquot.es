@@ -4,7 +4,7 @@
 #
 # Default configurations for recipes that require dev-server roles
 
-default['authorquotes']['http_port'] = 9900
+default['authorquotes']['http_port'] = 80
 default['authorquotes']['site']['host']    = 'authorquotes.dev'
 default['authorquotes']['site']['docroot'] = '/var/www/authorquot.es/htdocs'
 default['authorquotes']['site']['contact'] = 'andrew@ingenerator.com'
