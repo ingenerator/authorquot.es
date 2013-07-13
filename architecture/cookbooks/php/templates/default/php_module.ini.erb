@@ -1,0 +1,18 @@
+; configuration for php <%= @module_name %> module
+<% if @as_zend_extension -%>
+  zend_extension=<%= @extension %>
+<% else -%>
+  extension=<%= @extension %>
+<% end -%>
+
+[<%= @module_name %> Configuration]
+
+<% @ini_vars.sort.map do | key, val| -%>
+  <% if val.nil? -%>
+    <%= @module_name %>.<%= key %> =
+  <% elsif val.is_a?(Numeric) -%>
+    <%= @module_name %>.<%= key %> = <%= val %>
+  <% else -%>
+    <%= @module_name %>.<%= key %> = '<%= val %>'
+  <% end -%>
+<% end -%>

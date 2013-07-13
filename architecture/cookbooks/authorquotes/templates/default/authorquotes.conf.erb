@@ -1,0 +1,49 @@
+<VirtualHost *:<%= [@params[:port] || "80"].flatten.join " " %> >
+  ServerName <%= @params[:server_name] %>
+  ServerAlias <% @params[:server_aliases].each do |a| %><%= a %> <% end %>
+  ServerAdmin <%= @params[:contact] %>
+  DocumentRoot <%= @params[:docroot] %>
+  RewriteEngine On
+
+  <Directory <%= @params[:docroot] %>>
+    Options <%= [@params[:directory_options] || "FollowSymLinks" ].flatten.join " " %>
+    AllowOverride <%= [@params[:allow_override] || "None" ].flatten.join " " %>
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  <Location /server-status>
+    SetHandler server-status
+
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+  </Location>
+
+  # Expires module for static assets
+  <IfModule mod_expires.c>
+    ExpiresActive <%= [@params[:expires_active] || "Off"].flatten.join " " %>
+    ExpiresByType image/gif "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/jpg "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/x-icon "access plus 30 days"
+    ExpiresByType text/css "access plus 30 days"
+    ExpiresByType text/javascript "access plus 30 days"
+    ExpiresByType application/x-Shockwave-Flash "access plus 30 days"
+  </IfModule>
+  
+  # Logging
+  LogLevel <%= [@params[:log_level] || "info"].flatten.join " " %>
+  ErrorLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-error.log
+  CustomLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-access.log combined
+
+  # Directory options
+  DirectoryIndex <%= @params[:front_controller] %>
+
+  #Skip all files with .something
+  RewriteCond %{REQUEST_URI} \..+$
+  RewriteRule .* - [L]
+
+</VirtualHost>
