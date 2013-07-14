@@ -65,3 +65,11 @@ include_recipe "mysql::server"
 
 # Quick and nasty database migrations
 execute "mysql -uroot -pmysql < /vagrant/architecture/cookbooks/authorquotes/db_schema.sql"
+
+# Composer and composer dependencies
+composer "/usr/local/bin" do
+  action [:install, :update]
+end
+composer_project "/var/www.authorquot.es" do
+  action [:install]
+end

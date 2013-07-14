@@ -1,0 +1,19 @@
+{
+    "require":
+    {
+        "twilio/sdk": "3.10.*@stable"
+    },
+    "require-dev":
+    {
+    },
+    "repositories": [
+    ],
+    "autoload": {"psr-0": {"": "src"}},
+    "minimum-stability": "dev",
+    "config": {
+        "bin-dir": "bin",
+        "process-timeout": 600,
+        "preferred-install": "dist",
+        "cache-dir": "/var/composer/cache"
+    }
+}
