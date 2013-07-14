@@ -129,7 +129,7 @@ class Controller_Calls extends Controller
 				 'This is '.$quote->speakers.' on '.$quote->description
 		);
 		$play = $twiml->addChild('Play', $quote->clip_url);
-		$play->addAttribute('loop', 0);
+		$play->addAttribute('loop', 1);
 		$twiml->addChild('Redirect', '/calls/category');
 		$this->send_xml($twiml);
 	}
