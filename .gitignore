@@ -2,3 +2,4 @@
 /.vagrant
 /vendor
 /bin
+application/config/twilio.php
