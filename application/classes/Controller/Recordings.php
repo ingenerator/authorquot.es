@@ -81,13 +81,39 @@ class Controller_Recordings extends Controller
 		$quote->values($filtered_post);
 		$quote->save();
 
-		// Create the clip
+		// This next bit is nasty - don't look!
 
-		// Render the response
-		echo "OK";
+		// Grab the S3 file if required
+		$orig_recording = '/tmp/'.basename($recording->url);
+		if ( ! file_exists($orig_recording)) {
+			$this->exec_shell('wget -O '.escapeshellarg($orig_recording).' '.escapeshellarg($recording->url));
+		}
+
+		// Build the quote file name
+		$quote_path = '/quotes/'.$recording->id;
+		$quote_file = DOCROOT.$quote_path.'/'.$quote->id.'.mp3';
+		if ( ! file_exists(DOCROOT.$quote_path))
+		{
+			mkdir(DOCROOT.$quote_path, 0755, TRUE);
+		}
+
+		// Build the clipping params - by default add 0.8 seconds either side of user times to allow for the fade
+		$trim_start = ($quote->start > 0) ? $quote->start - 0.8 : 0;
+		$trim_end = $quote->end + 0.8;
+
+		$cmd = 'sox '
+			.escapeshellarg($orig_recording).' '
+			.escapeshellarg($quote_file).' '
+			.'trim '.round($trim_start, 1).' ='.round($trim_end, 1).' '
+			.'fade 1 0';
+		$this->exec_shell($cmd);
+		$quote->clip_url = $quote_file;
+		$quote->save();
+
+		// Render a response
 	}
 
-	/*
+	/**
 	 * Convert hours, mins, seconds to just seconds
 	 *
 	 * @param string $hms time in hours, mins seconds
@@ -98,6 +124,23 @@ class Controller_Recordings extends Controller
 	{
 		$parts = explode(':', $hms);
 		return (3600 * $parts[0]) + (60 * $parts[1]) + $parts[2];
+	}
+
+	/**
+	 * Run command in shell, throw exception on failure
+	 *
+	 * @param string $cmd the command to execute
+	 *
+	 * @throws Exception if it fails
+	 */
+	protected function exec_shell($cmd)
+	{
+		exec($cmd, $output, $return);
+
+		if ($return !== 0)
+		{
+			throw new Exception("Shell task `$cmd` failed with code $return".PHP_EOL.'|\t'.implode(PHP_EOL.'|\t', $output));
+		}
 	}
 
 }

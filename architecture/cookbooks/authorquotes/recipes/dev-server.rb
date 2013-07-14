@@ -35,6 +35,12 @@ directory "/var/log/authorquot.es" do
   mode 0700
 end
 
+directory "/var/www/authorquot.es/htdocs/quotes" do
+  owner node['apache']['user']
+  group node['apache']['group']
+  mode  0755
+end
+
 node.override['apache']['listen_ports'] = [node['authorquotes']['http_port']]
 
 # Packages
