@@ -6,6 +6,7 @@
  * @copyright 2013 inGenerator Ltd
  *
  * @var Model_Recording $recording the recording model
+ * @var boolean         $auto_play whether to automatically play
  */
 ?>
 <div class="container">
@@ -21,7 +22,11 @@
 
 	<div class="row pad-below">
 		<div class="span9">
-			<div id='audio-player' data-main-recording="<?=htmlspecialchars($recording->url);?>">
+			<script type="text/javascript">
+				window.main_recording = <?=json_encode($recording->url); ?>;
+				window.autoplay = <?=json_encode($auto_play);?>
+			</script>
+			<div id='audio-player'>
 				<img src="/assets/img/spinner.gif" height="28px">
 			</div>
 		</div>

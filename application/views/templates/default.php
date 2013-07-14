@@ -44,7 +44,8 @@ if ( ! isset($title)) {
       <a class="brand" href="#">authorquot.es</a>
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <li class="active"><a href="#">Home</a></li>
+          <li><a href="/">Home</a></li>
+		  <li><a href="/recordings">Recordings</a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>

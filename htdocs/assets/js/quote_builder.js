@@ -193,7 +193,8 @@
         jwplayer('audio-player').setup({
             file: file,
             width: '100%',
-            height: '28'
+            height: '28',
+            autostart: window.autoplay
         });
     }
 
@@ -202,7 +203,7 @@
      * Attach the AJAX submit handler for the quote form submission
      */
     $(document).ready(function qb_dom_ready() {
-       init_player($('#audio-player').data('main-recording'));
+       init_player(window.main_recording);
        $('#new-quote-form').ajaxForm({
            beforeSubmit: function qb_before_submit() {
                $('#new-quote-submit-modal .modal-body').html('<p class="text-center"><img src="/assets/img/spinner.gif"><br/>Please wait while we save and process your quotation.</p>');

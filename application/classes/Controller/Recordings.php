@@ -13,6 +13,27 @@ class Controller_Recordings extends Controller
 {
 
 	/**
+	 * Render a list of all the recordings
+	 *
+	 * @return void
+	 */
+	public function action_list()
+	{
+		$recordings = Model_Recording::factory()
+			->with('Quotes')
+			->find_all();
+
+		// Generate and output the view
+		$content = View::factory('recording/list')
+				   ->set('recordings', $recordings);
+		$template = View::factory('templates/default')
+					->set('title', 'All recordings')
+					->set('content', $content->render());
+
+		$this->response->body($template->render());
+	}
+
+	/**
 	 * Render the player page for a single full recording. Requires an id route parameter
 	 *
 	 * @throws HTTP_Exception_403 if no ID
@@ -34,7 +55,8 @@ class Controller_Recordings extends Controller
 
 		// Generate and output the view
 		$content = View::factory('recording/play')
-			->set('recording', $recording);
+			->set('recording', $recording)
+			->set('auto_play', $this->request->query('play'));
 		$template = View::factory('templates/default')
 			->set('title', $recording->title)
 			->set('content', $content->render());
