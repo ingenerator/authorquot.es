@@ -56,3 +56,6 @@ node.default['mysql']['server_debian_password'] = 'mysql'
 node.default['mysql']['server_repl_password'] = 'mysql'
 
 include_recipe "mysql::server"
+
+# Quick and nasty database migrations
+execute "mysql -uroot -pmysql < /vagrant/architecture/cookbooks/authorquotes/db_schema.sql"
