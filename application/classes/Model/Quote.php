@@ -52,6 +52,17 @@ class Model_Quote extends ORM
 	);
 
 	/**
+	 * @var array category numbers for phone menus
+	 */
+	public static $category_nums = array(
+		1 => self::CATEGORY_PROVOCATIVE,
+		2 => self::CATEGORY_INSPIRING,
+		3 => self::CATEGORY_MEANINGFUL,
+		4 => self::CATEGORY_AMUSING,
+		5 => self::CATEGORY_INTRIGUING
+	);
+
+	/**
 	 * Create an instance, optionally loading the record with specified ID from the database
 	 *
 	 * @param string $model The model to load
@@ -68,14 +79,20 @@ class Model_Quote extends ORM
 	/**
 	 * Return a random set of quotes for the category
 	 *
-	 * @param $category
+	 * @param $category if null then anything
 	 * @param $limit
 	 *
 	 * @return Database_Result|Model_Quote[]
 	 */
 	public function find_sample_for_category($category, $limit)
 	{
-		$results = $this->where($category, '>', 0)
+		// If a category passed then limit the search
+		if ($category) {
+			$query = $this->where($category, '>', 0);
+		} else {
+			$query = $this;
+		}
+		$results = $query
 			->with('Recording')
 			->order_by(DB::expr('RAND()'))
 			->limit($limit)
