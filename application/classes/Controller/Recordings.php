@@ -49,6 +49,11 @@ class Controller_Recordings extends Controller
 			throw new HTTP_Exception_400("This should be called with POST");
 		}
 
+		// Enforce AJAX to this method
+		if ( ! $this->request->is_ajax()) {
+			throw new HTTP_Exception_400("You need to use AJAZ for this");
+		}
+
 		// Load the recording object
 		$id = $this->request->param('id', -1);
 		$recording = Model_Recording::factory('Recording', $id);
@@ -91,7 +96,7 @@ class Controller_Recordings extends Controller
 
 		// Build the quote file name
 		$quote_path = '/quotes/'.$recording->id;
-		$quote_file = DOCROOT.$quote_path.'/'.$quote->id.'.mp3';
+		$quote_file = $quote_path.'/'.$quote->id.'.mp3';
 		if ( ! file_exists(DOCROOT.$quote_path))
 		{
 			mkdir(DOCROOT.$quote_path, 0755, TRUE);
@@ -103,7 +108,7 @@ class Controller_Recordings extends Controller
 
 		$cmd = 'sox '
 			.escapeshellarg($orig_recording).' '
-			.escapeshellarg($quote_file).' '
+			.escapeshellarg(DOCROOT.$quote_file).' '
 			.'trim '.round($trim_start, 1).' ='.round($trim_end, 1).' '
 			.'fade 1 0';
 		$this->exec_shell($cmd);
@@ -111,6 +116,18 @@ class Controller_Recordings extends Controller
 		$quote->save();
 
 		// Render a response
+		$response = array(
+			'success'    => TRUE,
+			'clip_url'   => Url::site($quote->clip_url, 'http', FALSE),
+			'share_url'  => '/foo',
+			'quote_view' => View::factory('recording/quote_table')
+							->set('quotes', array($quote))
+							->set('recording', $recording)
+							->set('row_only', TRUE)
+							->render()
+		);
+		$this->response->headers('Content-Type', 'application/json');
+		$this->response->body(json_encode($response));
 	}
 
 	/**

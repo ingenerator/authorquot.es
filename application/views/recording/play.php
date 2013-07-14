@@ -21,25 +21,19 @@
 
 	<div class="row pad-below">
 		<div class="span9">
-			<div id='audio-player'></div>
-			<script type='text/javascript'>
-				jwplayer('audio-player').setup({
-					file: '<?=htmlspecialchars($recording->url);?>',
-					width: '100%',
-					height: '28',
-					autostart: true
-				});
-			</script>
+			<div id='audio-player' data-main-recording="<?=htmlspecialchars($recording->url);?>">
+				<img src="/assets/img/spinner.gif" height="28px">
+			</div>
 		</div>
 		<div class="span3">
 			<button id="new-quote-toggle" type="button" class="btn btn-primary" data-active-text="Mark end of quote">
-				<i class="icon-quote-left"></i> Quote this recording
+				<i class="icon-quote-left"></i> Mark a new quote
 			</button>
 		</div>
 	</div>
 
 	<div id="new-quote" class="collapse">
-		<form class="form-horizontal" method="post" action="/recording/<?=$recording->id;?>/quotes">
+		<form id="new-quote-form" class="form-horizontal" method="post" action="/recording/<?=$recording->id;?>/quotes">
 			<div class="control-group">
 				<label class="control-label" for="start">Start and finish time</label>
 				<div class="controls controls-row">
@@ -115,6 +109,8 @@
 
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary">Save Quotation</button>
+				<p>You will be able to share your quotation once it is saved.</p>
+				<!--
 				<button type="submit" class="btn">
 					<i class="icon-facebook"></i> Share on Facebook
 				</button>
@@ -124,7 +120,26 @@
 				<button type="submit" class="btn">
 					<i class="icon-envelope"></i> Share by Email
 				</button>
+				-->
 			</div>
 		</form>
 	</div>
 </div>
+
+<div id="new-quote-submit-modal" class="modal hide fade" tabindex="-1" role="dialog">
+	<div class="modal-header">
+	</div>
+	<div class="modal-body">
+		<p class="text-center">
+			<img src="/assets/img/spinner.gif"><br/>
+			Please wait while we save and process your quotation.
+		</p>
+	</div>
+	<div class="modal-footer">
+	</div>
+</div>
+
+<?=View::factory('recording/quote_table')
+	->set('recording', $recording)
+	->set('quotes', $recording->Quotes->find_all())
+	->render();?>
