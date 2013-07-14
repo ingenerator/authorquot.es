@@ -39,7 +39,7 @@
 	</div>
 
 	<div id="new-quote" class="collapse">
-		<form class="form-horizontal">
+		<form class="form-horizontal" method="post" action="/recording/<?=$recording->id;?>/quotes">
 			<div class="control-group">
 				<label class="control-label" for="start">Start and finish time</label>
 				<div class="controls controls-row">
@@ -61,9 +61,9 @@
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" for="summary">Describe the quote</label>
+				<label class="control-label" for="description">Describe the quote</label>
 				<div class="controls">
-					<input class="input-block-level" name="summary" type="text" value="">
+					<input class="input-block-level" name="description" type="text" value="">
 					<span class="help-block">
 						Please provide a summary of the quote in 80 characters or less
 					</span>
@@ -72,7 +72,7 @@
 
 			<?php
 				$suggested_speakers = array();
-				foreach ($recording->Authors as $author):
+				foreach ($recording->Authors->find_all() as $author):
 					/** @var Model_Author $author */
 					$suggested_speakers[] = $author->name;
 				endforeach;
@@ -80,9 +80,9 @@
 
 			?>
 			<div class="control-group">
-				<label class="control-label" for="speaker">Who is speaking?</label>
+				<label class="control-label" for="speakers">Who is speaking?</label>
 				<div class="controls">
-					<input name="speaker"
+					<input name="speakers"
 						   type="text"
 						   value="<?=htmlentities($default_speaker);?>"
 						   autocomplete="off"
@@ -96,19 +96,19 @@
 				<label class="control-label">This quote is:</label>
 				<div class="controls">
 					<label class="checkbox inline">
-						<input type="checkbox" name="is_provocative" value="1"> Provocative
+						<input type="checkbox" name="provocative" value="1"> Provocative
 					</label>
 					<label class="checkbox inline">
-						<input type="checkbox" name="is_inspiring" value="1"> Inspiring
+						<input type="checkbox" name="inspiring" value="1"> Inspiring
 					</label>
 					<label class="checkbox inline">
-						<input type="checkbox" name="is_meaningful" value="1"> Meaningful
+						<input type="checkbox" name="meaningful" value="1"> Meaningful
 					</label>
 					<label class="checkbox inline">
-						<input type="checkbox" name="is_amusing" value="1"> Amusing
+						<input type="checkbox" name="amusing" value="1"> Amusing
 					</label>
 					<label class="checkbox inline">
-						<input type="checkbox" name="is_amusing" value="1"> Intriguing
+						<input type="checkbox" name="intriguing" value="1"> Intriguing
 					</label>
 				</div>
 			</div>
