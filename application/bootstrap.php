@@ -142,6 +142,18 @@ Route::set('quote', 'recording/<recording_id>/quote/<quote_id>')
 				'action'	 => 'quote'
 			   ));
 
+Route::set('quote_categories', 'categories')
+	->defaults(array(
+					'controller' => 'categories',
+					'action'	 => 'list'
+	));
+Route::set('quote_category', 'category/<category>')
+->defaults(array(
+				'controller' => 'categories',
+				'action'	 => 'show'
+		   ));
+
+
 Route::set('default', '(<controller>(/<action>(/<id>)))')
   ->defaults(array(
     'controller' => 'welcome',

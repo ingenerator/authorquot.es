@@ -27,11 +27,76 @@
 class Model_Quote extends ORM
 {
 
+	const CATEGORY_PROVOCATIVE = 'provocative';
+	const CATEGORY_INSPIRING = 'inspiring';
+	const CATEGORY_MEANINGFUL = 'meaningful';
+	const CATEGORY_AMUSING = 'amusing';
+	const CATEGORY_INTRIGUING = 'intriguing';
+
 	/**
 	 * @var array relationship definitions
 	 */
 	protected $_belongs_to = array(
 		'Recording' => array('foreign_key' => 'recording_id'),
 	);
+
+	/**
+	 * @var array category names and field mappings
+	 */
+	public static $category_names = array(
+		self::CATEGORY_PROVOCATIVE => 'provocative',
+		self::CATEGORY_INSPIRING => 'inspiring',
+		self::CATEGORY_MEANINGFUL => 'meaningful',
+		self::CATEGORY_AMUSING => 'amusing',
+		self::CATEGORY_INTRIGUING => 'intriguing'
+	);
+
+	/**
+	 * Create an instance, optionally loading the record with specified ID from the database
+	 *
+	 * @param string $model The model to load
+	 * @param int    $id    The ID to load
+	 *
+	 * @return Model_Quote
+	 */
+	public static function factory($model = 'Quote', $id = NULL)
+	{
+		return parent::factory($model, $id);
+	}
+
+
+	/**
+	 * Return a random set of quotes for the category
+	 *
+	 * @param $category
+	 * @param $limit
+	 *
+	 * @return Database_Result|Model_Quote[]
+	 */
+	public function find_sample_for_category($category, $limit)
+	{
+		$results = $this->where($category, '>', 0)
+			->with('Recording')
+			->order_by(DB::expr('RAND()'))
+			->limit($limit)
+			->find_all();
+		return $results;
+	}
+
+	/**
+	 * Return all the quotes for the category
+	 *
+	 * @param $category
+	 *
+	 * @return Database_Result|Model_Quote[]
+	 */
+	public function find_all_for_category($category)
+	{
+		$results = $this->where($category, '>', 0)
+				   ->with('Recording')
+				   ->order_by(DB::expr('RAND()'))
+				   ->find_all();
+		return $results;
+	}
 
 }

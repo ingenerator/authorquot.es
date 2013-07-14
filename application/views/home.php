@@ -4,6 +4,8 @@
  * 
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @copyright 2013 inGenerator Ltd
+ *
+ * @var string $category_preview a preview of quotes from each categroy
  */
 
 ?>
@@ -22,3 +24,5 @@
 	<a class="btn btn-large btn-primary" href="/recordings">View all recordings</a>
   </p>
 </div>
+
+<?=$category_preview;?>

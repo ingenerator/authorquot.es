@@ -19,8 +19,23 @@ class Controller_Welcome extends Controller
    */
   function action_index()
   {
-    $template = View::factory('templates/default');
-    $template->content = View::factory('home');
+	  // Grab 6 random ones for each category
+	  $category_quotes = array();
+	  foreach(Model_Quote::$category_names as $key => $name)
+	  {
+		  $category_quotes[$key] = Model_Quote::factory()->find_sample_for_category($key, 3);
+	  }
+
+	  // Generate and output the category view
+	  $category_preview = View::factory('categories/list')
+				 ->set('category_quotes', $category_quotes)
+				 ->set('category_names', Model_Quote::$category_names);
+
+	  $home = View::factory('home')
+		  ->set('category_preview', $category_preview->render());
+
+   	  $template = View::factory('templates/default');
+      $template->content = $home->render();
 
     $this->response->body($template->render());
   }

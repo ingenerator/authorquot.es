@@ -41,11 +41,12 @@ if ( ! isset($title)) {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="brand" href="#">authorquot.es</a>
+      <a class="brand" href="/">authorquot.es</a>
       <div class="nav-collapse collapse">
         <ul class="nav">
           <li><a href="/">Home</a></li>
 		  <li><a href="/recordings">Recordings</a></li>
+		  <li><a href="/categories">Quotes</a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>

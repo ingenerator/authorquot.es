@@ -2,9 +2,19 @@
 /* Padding to push content clear of the nav bar */
 body {
     padding-top:    60px;
-    padding-bottom: 40px;
+}
+
+footer {
+    border-top: 1px solid #333;
+    background-color: #eee;
+    margin-top: 60px;
+    padding: 20px;
 }
 
 div.row.pad-below {
     margin-bottom: 40px;
+}
+
+.category_sample ul.thumbnails {
+    margin-bottom: 0;
 }
