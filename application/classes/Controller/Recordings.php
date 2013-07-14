@@ -145,7 +145,7 @@ class Controller_Recordings extends Controller
 
 		// Render a response
 		$response = array(
-			'redirect_url'    => Url::site('/recording/'.$recording->id.'/quote/'.$quote->id.'?play=1', 'http', FALSE),
+			'redirect_url'    => URL::site('/recording/'.$recording->id.'/quote/'.$quote->id.'?play=1', 'http', FALSE),
 		);
 		$this->response->headers('Content-Type', 'application/json');
 		$this->response->body(json_encode($response));
