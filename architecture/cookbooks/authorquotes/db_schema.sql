@@ -62,7 +62,7 @@ CREATE PROCEDURE `updateDBSchema` ()
 	  END;
 	END IF;
 
-	IF @CurrentDBVer = 1 THEN
+	IF @CurrentDBVer <= 1 THEN
 	  BEGIN
 
 		ALTER TABLE `quotes`
