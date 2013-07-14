@@ -128,7 +128,8 @@ class Controller_Calls extends Controller
 				 'Say',
 				 'This is '.$quote->speakers.' on '.$quote->description
 		);
-		$twiml->addChild('Play', $quote->clip_url);
+		$play = $twiml->addChild('Play', $quote->clip_url);
+		$play->addAttribute('loop', 0);
 		$twiml->addChild('Redirect', '/calls/category');
 		$this->send_xml($twiml);
 	}
