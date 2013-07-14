@@ -70,7 +70,7 @@ execute "mysql -uroot -pmysql < /vagrant/architecture/cookbooks/authorquotes/db_
 composer "/usr/local/bin" do
   action [:install, :update]
 end
-composer_project "/var/www.authorquot.es" do
+composer_project "/var/www/authorquot.es" do
   action [:install]
   run_as node['apache']['user']
 end
