@@ -126,7 +126,7 @@ class Controller_Calls extends Controller
 		$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
 		$twiml->addChild(
 				 'Say',
-				 'This is '.$quote->speakers.' on '.$quote->description
+				 'This is '.$quote->speakers.' at the Edinburgh International Book Festival'
 		);
 		$play = $twiml->addChild('Play', $quote->clip_url);
 		$play->addAttribute('loop', 1);
