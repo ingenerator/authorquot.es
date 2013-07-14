@@ -56,7 +56,10 @@ if ( ! isset($title)) {
   <?php echo $content; ?>
 
   <footer>
-    <p class="credit">Built by <a href="http://www.ingenerator.com/">inGenerator</a>.</p>
+    <p class="credit">Built in 24 hours by <a href="http://www.ingenerator.com/">inGenerator</a> for
+		<a href="http://www.welcometosync.com/hack/">Culture Hack Scotland</a>.
+		Note, 24 hours. As in, this is really rough!
+	</p>
   </footer>
 </div>
 <!-- /container -->

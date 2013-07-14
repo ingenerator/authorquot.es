@@ -11,16 +11,12 @@
 <ul class="media-list">
 	<?php foreach ($recordings as $recording): ?>
 		<li class="media">
-			<a class="pull-left" href="/recording/<?=$recording->id?>">
+			<a class="pull-left text-center" href="/recording/<?=$recording->id?>">
 				<img style="width:111px;" class="media-object" src="<?=htmlspecialchars($recording->thumb_url);?>">
+				<i class="icon-play"></i> Play
 			</a>
-			<div class="pull-right">
-				<a class="btn" style="height:100%;" href="/recording/<?=$recording->id?>?play=true">
-					<i class="icon-play"</i> Play</i>
-				</a>
-			</div>
 			<div class="media-body">
-				<h4 class="media-heading"><?=htmlspecialchars($recording->title);?>
+				<h4 class="media-heading"><a href="/recording/<?=$recording->id?>"><?=htmlspecialchars($recording->title);?></a>
 					<?php if($quote_count = $recording->Quotes->count_all()): ?>
 						<span class="label"><?=$quote_count?> quotes</span>
 					<?php endif; ?>
