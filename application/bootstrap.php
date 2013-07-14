@@ -136,6 +136,11 @@ Route::set('recording', 'recording/<id>(/<action>)')
 				'controller' => 'recordings',
 				'action'     => 'play'
 		   ));
+Route::set('quote', 'recording/<recording_id>/quote/<quote_id>')
+	->defaults(array(
+				'controller' => 'recordings',
+				'action'	 => 'quote'
+			   ));
 
 Route::set('default', '(<controller>(/<action>(/<id>)))')
   ->defaults(array(

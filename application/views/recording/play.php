@@ -22,13 +22,17 @@
 
 	<div class="row pad-below">
 		<div class="span9">
-			<script type="text/javascript">
-				window.main_recording = <?=json_encode($recording->url); ?>;
-				window.autoplay = <?=json_encode($auto_play);?>
-			</script>
 			<div id='audio-player'>
 				<img src="/assets/img/spinner.gif" height="28px">
 			</div>
+			<script type="text/javascript">
+				jwplayer('audio-player').setup({
+					file: <?=json_encode($recording->url);?>,
+					width: '100%',
+					height: '28',
+					autostart: <?=json_encode($auto_play);?>
+				});
+			</script>
 		</div>
 		<div class="span3">
 			<button id="new-quote-toggle" type="button" class="btn btn-primary" data-active-text="Mark end of quote">

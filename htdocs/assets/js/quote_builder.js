@@ -184,41 +184,18 @@
     });
 
     /**
-     * Init the player
-     * @param file url of the file to play
-     */
-    function init_player(file)
-    {
-        $('#audio-player').html('<img src="/assets/img/spinner.gif" height="28px">');
-        jwplayer('audio-player').setup({
-            file: file,
-            width: '100%',
-            height: '28',
-            autostart: window.autoplay
-        });
-    }
-
-
-    /**
      * Attach the AJAX submit handler for the quote form submission
      */
     $(document).ready(function qb_dom_ready() {
-       init_player(window.main_recording);
        $('#new-quote-form').ajaxForm({
            beforeSubmit: function qb_before_submit() {
                $('#new-quote-submit-modal .modal-body').html('<p class="text-center"><img src="/assets/img/spinner.gif"><br/>Please wait while we save and process your quotation.</p>');
                $('#new-quote-submit-modal').modal();
            },
            success: function qb_submit_success(responseData) {
-               // Add the quote to the top of the quotes list
-               $('#quotes-table tbody').prepend(responseData.quote_view);
 
-               // Play the edited quote
-               init_player(responseData.clip_url);
-
-               // Show the success popup
-               $('#new-quote-submit-modal .modal-body').html('<div class="alert alert-success">Thanks, your quote has been saved and is now playing.</div>');
-
+               // Take the user to the quote url
+               window.location.href = responseData.redirect_url;
            },
            error: function qb_submit_error() {
                $('#new-quote-submit-modal .modal-body').html('<div class="alert alert-error">Sorry, that didn\'t work -maybe refresh the page or try a different audio region?</div>');

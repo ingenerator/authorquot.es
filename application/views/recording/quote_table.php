@@ -64,12 +64,9 @@ if ( ! isset($row_only)) {
 			<?php endif; ?>
 		</td>
 		<td>
-			<button class="btn" data-play-quote="<?=$quote->id;?>">
-				<i class="icon-play"></i> Play
-			</button>
-			<button class="btn" data-share-quote="<?=$quote->id;?>">
-				<i class="icon-share-alt"></i> Share
-			</button>
+			<a class="btn" href="/recording/<?=$recording->id;?>/quote/<?=$quote->id;?>?play=true">
+				<i class="icon-play"></i> Play and share
+			</a>
 		</td>
 	</tr>
 <?php endforeach; ?>

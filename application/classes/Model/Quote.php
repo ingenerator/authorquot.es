@@ -31,7 +31,7 @@ class Model_Quote extends ORM
 	 * @var array relationship definitions
 	 */
 	protected $_belongs_to = array(
-		'Recording' => array(),
+		'Recording' => array('foreign_key' => 'recording_id'),
 	);
 
 }

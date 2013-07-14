@@ -64,6 +64,12 @@ class Controller_Recordings extends Controller
 		$this->response->body($template->render());
 	}
 
+	/**
+	 * Post a new quote
+	 *
+	 * @throws HTTP_Exception_403
+	 * @throws HTTP_Exception_400
+	 */
 	public function action_quotes()
 	{
 		// Enforce POST to this method
@@ -139,17 +145,36 @@ class Controller_Recordings extends Controller
 
 		// Render a response
 		$response = array(
-			'success'    => TRUE,
-			'clip_url'   => Url::site($quote->clip_url, 'http', FALSE),
-			'share_url'  => '/foo',
-			'quote_view' => View::factory('recording/quote_table')
-							->set('quotes', array($quote))
-							->set('recording', $recording)
-							->set('row_only', TRUE)
-							->render()
+			'redirect_url'    => Url::site('/recording/'.$recording->id.'/quote/'.$quote->id.'?play=1', 'http', FALSE),
 		);
 		$this->response->headers('Content-Type', 'application/json');
 		$this->response->body(json_encode($response));
+	}
+
+	/**
+	 * Display and play a quote
+	 *
+	 */
+	public function action_quote()
+	{
+		// Find the quote data
+		$id = $this->request->param('quote_id', -1);
+		$quote = Model_Quote::factory('Quote', $id);
+		if ( ! $quote->loaded())
+		{
+			throw new HTTP_Exception_403("Quote ID '$id' could not be loaded");
+		}
+
+		// Display the quote view
+		$content = View::factory('recording/quote')
+				   ->set('quote', $quote)
+				   ->set('auto_play', $this->request->query('play'));
+		$template = View::factory('templates/default')
+					->set('title', 'Quote from '.$quote->Recording->title)
+					->set('content', $content->render());
+
+		$this->response->body($template->render());
+
 	}
 
 	/**
