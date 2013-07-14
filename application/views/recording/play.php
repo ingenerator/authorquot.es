@@ -66,7 +66,7 @@
 			<div class="control-group">
 				<label class="control-label" for="description">Describe the quote</label>
 				<div class="controls">
-					<input class="input-block-level" name="description" type="text" value="">
+					<input class="input-xxlarge" maxlength="80" name="description" type="text" value="">
 					<span class="help-block">
 						Please provide a summary of the quote in 80 characters or less
 					</span>
