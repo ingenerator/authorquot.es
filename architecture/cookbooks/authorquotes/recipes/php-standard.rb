@@ -71,6 +71,7 @@ include_recipe("php")
 # end
 
 # Install required PHP modules
+php_module "curl"
 php_module "mysql"
 php_module "mysqli" do
   recipe_name "mysql"

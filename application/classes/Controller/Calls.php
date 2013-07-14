@@ -135,6 +135,147 @@ class Controller_Calls extends Controller
 	}
 
 	/**
+	 * Schedule a phone share (this is POST and js only)
+	 */
+	public function action_scheduleshare()
+	{
+		// Enforce POST to this method
+		if ($this->request->method() != Request::POST) {
+			throw new HTTP_Exception_400("This should be called with POST");
+		}
+
+		// Enforce AJAX to this method
+		if ( ! $this->request->is_ajax()) {
+			throw new HTTP_Exception_400("You need to use AJAX for this");
+		}
+
+		// First create and store the model
+		$share = new Model_Phoneshare;
+		$share->values(
+			Arr::extract($this->request->post(), array(
+				'dest_number', 'sender_number', 'quote_id'
+			))
+		);
+
+		// Just support sending now for now
+		$share->send_at = date('Y-m-d H:i:s');
+		$share->save();
+
+		// Trigger the twilio call to confirm and record greeting
+		$twilio = Twilio::create_client();
+		$twilio->account->calls->create(
+			Twilio::$our_number,
+			$share->sender_number,
+			URL::site('/calls/confirmshare?share_id='.$share->id, 'http', FALSE)
+		);
+	}
+
+	/**
+	 * Handles the call to the user to confirm they want to schedule a phone share of a quote
+	 */
+	public function action_confirmshare()
+	{
+		$share_id = $this->request->query('share_id');
+		$share = Model_Phoneshare::factory('Phoneshare', $share_id);
+		if ( ! $share->loaded()) {
+			throw new HTTP_Exception_403("That's not a valid phoneshare_id");
+		}
+
+		$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
+		$twiml->addChild(
+			'Say',
+			'This is authorquotes. You asked us to share a quote of '.$share->Quote->speakers.' by phone to '.$share->dest_number.'. '
+			.' After the tone, please record a personal greeting for us to play before the quote, then press any key.'
+		);
+
+		$record = $twiml->addChild('Record');
+		$record->addAttribute('action', '/calls/greetingrecorded?share_id='.$share_id);
+		$record->addAttribute('maxLength', 60);
+		$record->addAttribute('playBeep', TRUE);
+
+		$twiml->addChild('Say', 'You didn\'t say anything - your share has been cancelled');
+
+		$this->send_xml($twiml);
+	}
+
+	/**
+	 * Confirm the share once the greeting has been recorded
+	 */
+	public function action_greetingrecorded()
+	{
+		$share_id = $this->request->query('share_id');
+		$share = Model_Phoneshare::factory('Phoneshare', $share_id);
+		if ( ! $share->loaded()) {
+			throw new HTTP_Exception_403("That's not a valid phoneshare_id");
+		}
+
+		if ($this->request->post('Digits') === 'hangup') {
+			// Just leave it
+			return;
+		}
+
+		$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
+		$twiml->addChild(
+			'Say',
+			'Great, we will share that quote for you.'
+		);
+		$share->greeting_url = $this->request->post('RecordingUrl');
+		$share->ready = TRUE;
+		$share->save();
+
+		// Send the response now
+		ignore_user_abort(TRUE);
+		$this->send_xml($twiml);
+		$this->response->send_headers();
+		echo $this->response->body();
+		while (ob_get_level()) {
+			ob_get_flush();
+		}
+		flush();
+
+
+		// Now send the call
+		$twilio = Twilio::create_client();
+		$twilio->account->calls->create(
+			Twilio::$our_number,
+			$share->dest_number,
+			URL::site('/calls/playshare?share_id='.$share->id, 'http', FALSE)
+		);
+		exit;
+	}
+
+	/**
+	 * Handles the call to the user to confirm they want to schedule a phone share of a quote
+	 */
+	public function action_playshare()
+	{
+		$share_id = $this->request->query('share_id');
+		$share = Model_Phoneshare::factory('Phoneshare', $share_id);
+		if ( ! $share->loaded()) {
+			throw new HTTP_Exception_403("That's not a valid phoneshare_id");
+		}
+
+		$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
+
+		// Play the greeting
+		$greet = $twiml->addChild('Play', $share->greeting_url);
+		$greet->addAttribute('loop', 1);
+
+		$quote = $share->Quote;
+		$play = $twiml->addChild('Play', $quote->clip_url);
+		$play->addAttribute('loop', 1);
+
+		$twiml->addChild(
+			'Say',
+			'That was '.$quote->speakers.' at the Edinburgh International Book Festival. This call was powered by authorquotes and lots of coffee'
+		);
+
+		$this->send_xml($twiml);
+	}
+
+
+
+	/**
 	 * Send an XML response to the caller
 	 *
 	 * @param SimpleXMLElement $xml the xml to send

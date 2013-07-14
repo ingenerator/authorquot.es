@@ -7,6 +7,8 @@
  */
 class Twilio {
 
+	public static $our_number = NULL;
+
 	/**
 	 * Create the twilio service client
 	 *
@@ -16,6 +18,7 @@ class Twilio {
 	{
 		require_once(DOCROOT.'/../vendor/twilio/sdk/Services/Twilio.php');
 		$config = Kohana::$config->load('twilio');
+		self::$our_number = $config['incoming_number'];
 		$client = new Services_Twilio($config['sid'], $config['token']);
 		return $client;
 	}

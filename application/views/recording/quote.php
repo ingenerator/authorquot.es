@@ -77,9 +77,61 @@
 
 <div class="row">
 	<div class="span12">
-		<button type="button"><i class="icon-facebook"></i> Share on facebook</button>
-		<button type="button"><i class="icon-twitter"></i> Share on twitter</button>
-		<button type="button"><i class="icon-envelope"></i> Share by email</button>
-		<button type="button"><i class="icon-phone"></i> Share by phone</button>
+		<button class="btn" type="button"><i class="icon-facebook"></i> Share on facebook</button>
+		<button class="btn" type="button"><i class="icon-twitter"></i> Share on twitter</button>
+		<button class="btn"type="button"><i class="icon-envelope"></i> Share by email</button>
+		<a href="#phone-share-widget" role="button" class="btn" data-toggle="modal">
+			<i class="icon-phone"></i>  Share by phone
+		</a>
 	</div>
+</div>
+
+<div id="phone-share-widget" class="modal hide fade" role="dialog" tabindex="-1">
+	<form id="phone-share-form" class="form-horizontal" action="/calls/scheduleshare" method="post">
+		<input type="hidden" name="quote_id" value="<?=$quote->id;?>"</input>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel"><i class="icon-phone"></i>Share by phone</h3>
+		</div>
+		<div class="modal-body">
+			<p>We can phone the number you provide and play them this quote. Don't be evil.</p>
+			<div class="control-group">
+				<label class="control-label">Number to call:</label>
+				<div class="controls">
+					<input type="text" name="dest_number" value="">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">When should we call?</label>
+				<div class="controls">
+					<label class="radio">
+						<input type="radio" name="call_when" id="optionsRadios1" value="now" checked>
+						Now
+					</label>
+					<label class="radio">
+						<input type="radio" name="call_when" id="optionsRadios1" value="future">
+						In the future:
+					</label>
+					<div class="input-append">
+						<input class="span2" id="appendedInputButton" name="call_at" type="text" disabled>
+						<button class="btn" type="button" disabled><i class="icon-calendar"></i></button>
+					</div>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">What is your number?</label>
+				<div class="controls">
+					<input type="text" name="sender_number">
+					<span class="help-block">
+						We will phone you before scheduling the call so you can record a personal greeting. And we'll
+						keep your number in case you ignore where we said don't be evil.
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button id="schedule-call" class="btn btn-primary" type="submit">Schedule call</button>
+		</div>
+	</form>
 </div>

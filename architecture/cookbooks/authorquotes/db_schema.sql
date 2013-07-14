@@ -71,11 +71,26 @@ CREATE PROCEDURE `updateDBSchema` ()
 	  END;
 	END IF;
 
+	IF @CurrentDBVer <= 2 THEN
+	  BEGIN
 
+	    CREATE TABLE `phoneshares` (
+	      `id`    INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	      `dest_number` VARCHAR(255),
+	      `sender_number` VARCHAR(255),
+	      `send_at`       DATETIME,
+	      `quote_id`  INT,
+	      `greeting_url` VARCHAR(255),
+	      `ready` TINYINT,
+	      `sent` TINYINT,
+	    PRIMARY KEY (`id`)
+	    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	  END;
+	END IF;
 
 
 	/* Update the sequence number at the end */
-	INSERT INTO `migration` SET `version` = 2;
+	INSERT INTO `migration` SET `version` = 3;
 
 END$$
 

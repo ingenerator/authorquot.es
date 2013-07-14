@@ -184,7 +184,7 @@
     });
 
     /**
-     * Attach the AJAX submit handler for the quote form submission
+     * Attach the AJAX submit handler for the quote form submission and the share-by-phone scheduler submission
      */
     $(document).ready(function qb_dom_ready() {
        $('#new-quote-form').ajaxForm({
@@ -201,6 +201,21 @@
                $('#new-quote-submit-modal .modal-body').html('<div class="alert alert-error">Sorry, that didn\'t work -maybe refresh the page or try a different audio region?</div>');
            }
        });
+
+       $('#phone-share-form').ajaxForm({
+           beforeSubmit: function qb_before_submit() {
+               $('#phone-share-widget .modal-body').html('<p class="text-center"><img src="/assets/img/spinner.gif"><br/>Please wait - we are phoning you to record your greeting.</p>');
+               $('#phone-share-widget .modal-footer').hide();
+           },
+           success: function qb_submit_success(responseData) {
+               $('#phone-share-widget .modal-body').html('<div class="alert alert-success">Yep, that worked - we\'ll phone your quote through.</div>');
+           },
+           error: function qb_submit_error() {
+               $('#phone-share-widget .modal-body').html('<div class="alert alert-error">Sorry, that didn\'t work for some reason. You may or may not get a call.</div>');
+           }
+       });
+
+
     });
 
 }(window.jQuery);
