@@ -62,10 +62,20 @@ CREATE PROCEDURE `updateDBSchema` ()
 	  END;
 	END IF;
 
+	IF @CurrentDBVer = 1 THEN
+	  BEGIN
+
+		ALTER TABLE `quotes`
+		ADD COLUMN `recording_id` INT NOT NULL;
+
+	  END;
+	END IF;
+
+
 
 
 	/* Update the sequence number at the end */
-	INSERT INTO `migration` SET `version` = 1;
+	INSERT INTO `migration` SET `version` = 2;
 
 END$$
 

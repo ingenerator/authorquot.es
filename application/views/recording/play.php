@@ -5,17 +5,17 @@
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @copyright 2013 inGenerator Ltd
  *
- * @var array $recording the recording data
+ * @var Model_Recording $recording the recording model
  */
 ?>
 <div class="container">
 	<div class="media">
 		<a class="pull-left">
-			<img class="media-object" src="<?=htmlspecialchars($recording['thumb_url']);?>">
+			<img class="media-object" src="<?=htmlspecialchars($recording->thumb_url);?>">
 		</a>
 		<div class="media-body">
-			<h2 class="media-heading"><?=htmlspecialchars($recording['title']);?></h2>
-			<?=$recording['description_full'];?>
+			<h2 class="media-heading"><?=htmlspecialchars($recording->title);?></h2>
+			<?=$recording->description_full;?>
 		</div>
 	</div>
 
@@ -24,7 +24,7 @@
 			<div id='audio-player'></div>
 			<script type='text/javascript'>
 				jwplayer('audio-player').setup({
-					file: '<?=htmlspecialchars($recording['url']);?>',
+					file: '<?=htmlspecialchars($recording->url);?>',
 					width: '100%',
 					height: '28',
 					autostart: true
@@ -72,8 +72,9 @@
 
 			<?php
 				$suggested_speakers = array();
-				foreach ($recording['related_authors'] as $author):
-					$suggested_speakers[] = $author['forename'].' '.$author['surname'];
+				foreach ($recording->Authors as $author):
+					/** @var Model_Author $author */
+					$suggested_speakers[] = $author->name;
 				endforeach;
 				$default_speaker = (count($suggested_speakers) === 1) ? $suggested_speakers[0] : '';
 
