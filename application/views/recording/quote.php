@@ -74,3 +74,12 @@
 		</a>
 	</div>
 </div>
+
+<div class="row">
+	<div class="span12">
+		<button type="button"><i class="icon-facebook"></i> Share on facebook</button>
+		<button type="button"><i class="icon-twitter"></i> Share on twitter</button>
+		<button type="button"><i class="icon-envelope"></i> Share by email</button>
+		<button type="button"><i class="icon-phone"></i> Share by phone</button>
+	</div>
+</div>
