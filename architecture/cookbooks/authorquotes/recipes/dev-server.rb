@@ -72,5 +72,5 @@ composer "/usr/local/bin" do
 end
 composer_project "/var/www.authorquot.es" do
   action [:install]
-  user   node['apache']['user']
+  run_as node['apache']['user']
 end
