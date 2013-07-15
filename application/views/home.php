@@ -6,6 +6,7 @@
  * @copyright 2013 inGenerator Ltd
  *
  * @var string $category_preview a preview of quotes from each categroy
+ * @var string $incoming_number  the number to phone the app on
  */
 
 ?>
@@ -22,6 +23,7 @@
   </p>
   <p>
 	<a class="btn btn-large btn-primary" href="/recordings">View all recordings</a>
+	<i class="icon-phone"></i> Get quotes from your phone - <?=str_replace('+44', '0', $incoming_number);?>
   </p>
 </div>
 

@@ -32,7 +32,9 @@ class Controller_Welcome extends Controller
 				 ->set('category_names', Model_Quote::$category_names);
 
 	  $home = View::factory('home')
-		  ->set('category_preview', $category_preview->render());
+		  ->set('category_preview', $category_preview->render())
+	  	  ->set('incoming_number', Kohana::$config->load('twilio')->get('incoming_number'));
+
 
    	  $template = View::factory('templates/default');
       $template->content = $home->render();
