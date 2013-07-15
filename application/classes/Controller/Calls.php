@@ -45,10 +45,7 @@ class Controller_Calls extends Controller
 		}
 		$menu .= ' or for a random quote press any other key or wait.';
 
-		$gather->addChild(
-			'Say',
-			$menu
-		);
+		$this->add_twilio_say($gather, $menu);
 
 		// Add a fallback for a random quote
 		$twiml->addChild('Redirect', '/calls/category');
@@ -98,7 +95,7 @@ class Controller_Calls extends Controller
 		$gather->addAttribute('timeout', 10);
 		$gather->addAttribute('numDigits', 1);
 
-		$gather->addChild('Say', $menu);
+		$this->add_twilio_say($gather, $menu);
 
 		// Fallback to go back to the category menu
 		$twiml->addChild('Redirect', '/calls/incoming');
@@ -116,7 +113,10 @@ class Controller_Calls extends Controller
 		if ( ! isset($offered[$digits])) {
 			// Not an option
 			$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
-			$twiml->addChild('Say', 'You did not select one of the offered quotes');
+			$this->add_twilio_say(
+				$twiml,
+				'You did not select one of the offered quotes'
+			);
 			$twiml->addChild('Redirect', '/calls/incoming');
 			return $this->send_xml($twiml);
 		}
@@ -124,9 +124,9 @@ class Controller_Calls extends Controller
 		// Otherwise load and play the quote
 		$quote = Model_Quote::factory('Quote', $offered[$digits]);
 		$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
-		$twiml->addChild(
-				 'Say',
-				 'This is '.$quote->speakers.' at the Edinburgh International Book Festival'
+		$this->add_twilio_say(
+			$twiml,
+			'This is '.$quote->speakers.' at the Edinburgh International Book Festival'
 		);
 		$play = $twiml->addChild('Play', $quote->clip_url);
 		$play->addAttribute('loop', 1);
@@ -182,9 +182,12 @@ class Controller_Calls extends Controller
 		}
 
 		$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
-		$twiml->addChild(
-			'Say',
-			'This is authorquotes. You asked us to share a quote of '.$share->Quote->speakers.' by phone to '.$share->dest_number.'. '
+
+		// Add spaces between each digit
+		$num = chunk_split($share->dest_number,1,' ');
+		$this->add_twilio_say(
+			$twiml,
+			'This is authorquotes. You asked us to share a quote of '.$share->Quote->speakers.' by phone to '.$num.'. '
 			.' After the tone, please record a personal greeting for us to play before the quote, then press any key.'
 		);
 
@@ -193,7 +196,10 @@ class Controller_Calls extends Controller
 		$record->addAttribute('maxLength', 60);
 		$record->addAttribute('playBeep', TRUE);
 
-		$twiml->addChild('Say', 'You didn\'t say anything - your share has been cancelled');
+		$this->add_twilio_say(
+			$twiml,
+			'You didn\'t say anything - your share has been cancelled'
+		);
 
 		$this->send_xml($twiml);
 	}
@@ -215,8 +221,8 @@ class Controller_Calls extends Controller
 		}
 
 		$twiml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Response/>');
-		$twiml->addChild(
-			'Say',
+		$this->add_twilio_say(
+			$twiml,
 			'Great, we will share that quote for you.'
 		);
 		$share->greeting_url = $this->request->post('RecordingUrl');
@@ -265,14 +271,21 @@ class Controller_Calls extends Controller
 		$play = $twiml->addChild('Play', $quote->clip_url);
 		$play->addAttribute('loop', 1);
 
-		$twiml->addChild(
-			'Say',
+		$this->add_twilio_say(
+			$twiml,
 			'That was '.$quote->speakers.' at the Edinburgh International Book Festival. This call was powered by authorquotes and lots of coffee'
 		);
 
 		$this->send_xml($twiml);
 	}
 
+	protected function add_twilio_say(SimpleXMLElement $parent, $text)
+	{
+		$say = $parent->addChild('Say', $text);
+		$say->addAttribute('voice', 'alice');
+		$say->addAttribute('language', 'en-gb');
+		return $say;
+	}
 
 
 	/**
