@@ -34,7 +34,7 @@ class Controller_Calls extends Controller
 		$session = $this->session();
 		$menu = '';
 		if ( ! $session->get('said_hello')) {
-			$menu = 'Welcome to authorquotes. ';
+			$menu = 'Welcome to author quotes. ';
 			$session->set('said_hello', TRUE);
 		}
 
@@ -273,7 +273,7 @@ class Controller_Calls extends Controller
 
 		$this->add_twilio_say(
 			$twiml,
-			'That was '.$quote->speakers.' at the Edinburgh International Book Festival. This call was powered by authorquotes and lots of coffee'
+			'That was '.$quote->speakers.' at the Edinburgh International Book Festival. This call was powered by author quotes and lots of coffee'
 		);
 
 		$this->send_xml($twiml);
