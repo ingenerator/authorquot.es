@@ -99,6 +99,9 @@
 				<label class="control-label">Number to call:</label>
 				<div class="controls">
 					<input type="text" name="dest_number" value="">
+					<span class="help-block">
+						Use international format - eg +441315103519.
+					</span>
 				</div>
 			</div>
 			<div class="control-group">
@@ -109,7 +112,7 @@
 						Now
 					</label>
 					<label class="radio">
-						<input type="radio" name="call_when" id="optionsRadios1" value="future">
+						<input type="radio" name="call_when" id="optionsRadios1" value="future" disabled>
 						In the future:
 					</label>
 					<div class="input-append">
@@ -123,7 +126,8 @@
 				<div class="controls">
 					<input type="text" name="sender_number">
 					<span class="help-block">
-						We will phone you before scheduling the call so you can record a personal greeting. And we'll
+						Use international format - eg +441315103519. We will phone you before scheduling the call
+						so you can record a personal greeting. And we'll
 						keep your number in case you ignore where we said don't be evil.
 					</span>
 				</div>
