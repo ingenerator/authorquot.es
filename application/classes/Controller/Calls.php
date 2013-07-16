@@ -187,7 +187,7 @@ class Controller_Calls extends Controller
 		$num = chunk_split($share->dest_number,1,' ');
 		$this->add_twilio_say(
 			$twiml,
-			'This is authorquotes. You asked us to share a quote of '.$share->Quote->speakers.' by phone to '.$num.'. '
+			'This is author quotes. You asked us to share a quote of '.$share->Quote->speakers.' by phone to '.$num.'. '
 			.' After the tone, please record a personal greeting for us to play before the quote, then press any key.'
 		);
 
